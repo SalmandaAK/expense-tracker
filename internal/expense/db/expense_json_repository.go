@@ -8,14 +8,16 @@ import (
 	"maps"
 	"os"
 	"slices"
+	"time"
 
 	"github.com/SalmandaAK/expense-tracker/internal/expense/domain"
 	"github.com/SalmandaAK/expense-tracker/internal/helper"
 )
 
 var (
-	errEmptyExpenseList = errors.New("expense list is empty")
-	errTaskNotFound     = errors.New("task not found")
+	errEmptyExpenseList        = errors.New("expense list is empty")
+	errTaskNotFound            = errors.New("task not found")
+	errEmptyExpenseListByMonth = errors.New("no expenses found during this month")
 )
 
 type ExpenseJSONRepository struct {
@@ -53,7 +55,9 @@ func (r *ExpenseJSONRepository) saveAllExpenses() error {
 func (r *ExpenseJSONRepository) AddExpense(e *domain.Expense) error {
 	err := r.loadAllExpenses()
 	if err != nil {
-		return err
+		if err != errEmptyExpenseList {
+			return err
+		}
 	}
 	id := domain.ExpenseId(helper.GenerateNumberId(r.expenses))
 	e.Id = id
@@ -87,4 +91,22 @@ func (r *ExpenseJSONRepository) FindExpenseById(id domain.ExpenseId) (*domain.Ex
 func (r *ExpenseJSONRepository) DeleteExpense(e *domain.Expense) error {
 	delete(r.expenses, e.Id)
 	return r.saveAllExpenses()
+}
+
+func (r *ExpenseJSONRepository) FindAllExpensesByMonth(month int) ([]*domain.Expense, error) {
+	err := r.loadAllExpenses()
+	if err != nil {
+		return nil, err
+	}
+	var expensesByMonth []*domain.Expense
+	iter := maps.Values(r.expenses)
+	for expense := range iter {
+		if expense.CreatedAt.Month() == time.Month(month) {
+			expensesByMonth = append(expensesByMonth, expense)
+		}
+	}
+	if len(expensesByMonth) == 0 {
+		return nil, errEmptyExpenseListByMonth
+	}
+	return expensesByMonth, nil
 }

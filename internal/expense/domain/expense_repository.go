@@ -5,4 +5,5 @@ type ExpenseRepository interface {
 	FindAllExpenses() ([]*Expense, error)
 	FindExpenseById(ExpenseId) (*Expense, error)
 	DeleteExpense(*Expense) error
+	FindAllExpensesByMonth(int) ([]*Expense, error)
 }

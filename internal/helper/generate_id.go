@@ -9,6 +9,10 @@ import (
 // Then it finds a number before unused Id in a list of Id (which is in ascending sort).
 // And then it generates Id by adding 1 into the number it found.
 func GenerateNumberId[K ~int, V any](m map[K]V) int {
+	if len(m) == 0 {
+		return 1
+	}
+
 	idList := make([]int, 0, len(m))
 	ids := maps.Keys(m)
 	for id := range ids {
