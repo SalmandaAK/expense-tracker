@@ -38,5 +38,5 @@ var month int
 func init() {
 	rootCmd.AddCommand(summaryCmd)
 
-	summaryCmd.Flags().IntVar(&month, "month", 0, "month where expenses happened")
+	summaryCmd.Flags().IntVar(&month, "month", 0, "month number where the expenses happened")
 }
