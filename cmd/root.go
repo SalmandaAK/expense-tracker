@@ -4,21 +4,30 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/SalmandaAK/expense-tracker/internal/expense/db"
+	"github.com/SalmandaAK/expense-tracker/internal/expense/service"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
+
+var cfgFile = filepath.Join(filepath.Dir(""), ".expense-tracker.yaml")
+
+var expenseStorage = filepath.Join(filepath.Dir(""), "expense.json")
+var expenseRepo = db.New(expenseStorage)
+var expenseService = service.New(expenseRepo)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "./expense-tracker",
-	Short: "Expense Tracker is an application to track your expenses",
+	Use:   "expense-tracker",
+	Short: "Expense-tracker is an app to track your expenses",
 	Long: `
-Expense Tracker is an application to track your expenses.
-This application allows you to add, delete, and view your expenses.
-This application also provides summary of the expenses.
-Usage: ./expense-tracker <subcommand>
-`,
+	Expense-tracker is an app to track your expenses. It provides you the ability to save your expenses,
+	and give you a summary of your expenses.
+	`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -31,13 +40,31 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	cobra.OnInitialize(initConfig)
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.expense-tracker.yaml)")
+	viper.SetDefault("currency", "$")
+}
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		// Search config in home directory with name ".expense-tracker" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName(".expense-tracker")
+	}
+
+	viper.AutomaticEnv() // read in environment variables that match
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err != nil {
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
 }
