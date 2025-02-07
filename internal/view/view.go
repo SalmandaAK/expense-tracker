@@ -10,23 +10,23 @@ import (
 )
 
 func DisplayError(err error) {
-	fmt.Printf("Error: %v", err)
+	fmt.Printf("Error: %v\n", err)
 }
 
 func DisplayMessage(message string) {
-	fmt.Printf("%v", message)
+	fmt.Printf("%v\n", message)
 }
 
-func DisplayExpenseList(expenses []*domain.Expense) {
+func DisplayExpenseList(expenses []*domain.Expense, currency string) {
 	tabwriter := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.DiscardEmptyColumns)
 
 	fmt.Fprintf(tabwriter, "\tID\t\tDate\t\tDescription\t\tAmount\t\n")
 	for _, e := range expenses {
-		fmt.Fprintf(tabwriter, "\t%d\t\t%s\t\t%s\t\t%d\t\n", e.Id, e.CreatedAt.Format(time.DateOnly), e.Description, e.Amount)
+		fmt.Fprintf(tabwriter, "\t%d\t\t%s\t\t%s\t\t%s %d\t\n", e.Id, e.CreatedAt.Format(time.DateOnly), e.Description, currency, e.Amount)
 	}
 	tabwriter.Flush()
 }
 
 func DisplaySummary(summary int) {
-	fmt.Printf("Total expenses: %v", summary)
+	fmt.Printf("Total expenses: %v\n", summary)
 }
