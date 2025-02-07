@@ -43,6 +43,10 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	viper.SetDefault("currency", "$")
+	viper.BindPFlags(addCmd.Flags())
+	viper.BindPFlags(deleteCmd.Flags())
+	viper.BindPFlags(summaryCmd.Flags())
+	viper.BindPFlags(configureCmd.Flags())
 }
 
 // initConfig reads in config file and ENV variables if set.

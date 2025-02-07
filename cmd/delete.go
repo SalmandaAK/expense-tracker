@@ -4,10 +4,9 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/SalmandaAK/expense-tracker/internal/view"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // deleteCmd represents the delete command
@@ -19,20 +18,18 @@ var deleteCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s := expenseService
-		err := s.DeleteExpense(id)
+		err := s.DeleteExpense(viper.GetInt("id"))
 		if err != nil {
 			view.DisplayError(err)
 			return
 		}
-		view.DisplayMessage(fmt.Sprintln("Expense deleted successfully"))
+		view.DisplayMessage("Expense deleted successfully")
 	},
 }
-
-var id int
 
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 
-	deleteCmd.Flags().IntVar(&id, "id", 0, "ID of expense")
+	deleteCmd.Flags().Int("id", 0, "ID number of expense")
 	deleteCmd.MarkFlagRequired("id")
 }

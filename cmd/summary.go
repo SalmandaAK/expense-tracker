@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/SalmandaAK/expense-tracker/internal/view"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // summaryCmd represents the summary command
@@ -14,6 +15,7 @@ var summaryCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s := expenseService
+		month := viper.GetInt("month")
 		if month != 0 {
 			summary, err := s.SummaryExpensesByMonth(month)
 			if err != nil {
@@ -32,10 +34,8 @@ var summaryCmd = &cobra.Command{
 	},
 }
 
-var month int
-
 func init() {
 	rootCmd.AddCommand(summaryCmd)
 
-	summaryCmd.Flags().IntVar(&month, "month", 0, "month number where the expenses happened")
+	summaryCmd.Flags().Int("month", 0, "month in number 1-12")
 }

@@ -21,21 +21,20 @@ var configureCmd = &cobra.Command{
 	The default is $
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		currency := viper.GetString("currency")
 		viper.Set("currency", currency)
 		err := viper.WriteConfig()
 		if err != nil {
 			view.DisplayError(err)
 			return
 		}
-		view.DisplayMessage(fmt.Sprintf("Currency has been changed successfully into %s", currency))
+		view.DisplayMessage(fmt.Sprintf("Currency has been changed into %s successfully", currency))
 	},
 }
-
-var currency string
 
 func init() {
 	rootCmd.AddCommand(configureCmd)
 
-	configureCmd.Flags().StringVar(&currency, "currency", "", "Change currency")
+	configureCmd.Flags().String("currency", "", "Change currency")
 	configureCmd.MarkFlagRequired("currency")
 }
