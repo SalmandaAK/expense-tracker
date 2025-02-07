@@ -25,9 +25,13 @@ var rootCmd = &cobra.Command{
 	Use:   "expense-tracker",
 	Short: "Expense-tracker is an app to track your expenses",
 	Long: `
-	Expense-tracker is an app to track your expenses. It provides you the ability to save your expenses,
+	Expense-tracker is an app to track your expenses.
+	It provides you the ability to save your expenses,
 	and give you a summary of your expenses.
 	`,
+	CompletionOptions: cobra.CompletionOptions{
+		HiddenDefaultCmd: true,
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -68,7 +72,12 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("fatal error config file: %w", err))
+	if err := viper.ReadInConfig(); err == nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; ignore error if desired
+		} else {
+			// Config file was found but another error was produced
+			panic(fmt.Errorf("fatal error config file: %w", err))
+		}
 	}
 }
