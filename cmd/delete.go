@@ -6,7 +6,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/SalmandaAK/expense-tracker/internal/config"
 	"github.com/SalmandaAK/expense-tracker/internal/view"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +18,7 @@ var deleteCmd = &cobra.Command{
 	Delete an expense.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		s := config.InitiateExpenseErvice(config.FilePath)
+		s := expenseService
 		err := s.DeleteExpense(id)
 		if err != nil {
 			view.DisplayError(err)

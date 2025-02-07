@@ -4,9 +4,9 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/SalmandaAK/expense-tracker/internal/config"
 	"github.com/SalmandaAK/expense-tracker/internal/view"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // listCmd represents the list command
@@ -17,13 +17,13 @@ var listCmd = &cobra.Command{
 	List all expenses.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		s := config.InitiateExpenseErvice(config.FilePath)
+		s := expenseService
 		expenses, err := s.FindAllExpenses()
 		if err != nil {
 			view.DisplayError(err)
 			return
 		}
-		view.DisplayExpenseList(expenses)
+		view.DisplayExpenseList(expenses, viper.GetString("currency"))
 	},
 }
 
