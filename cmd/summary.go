@@ -15,21 +15,20 @@ var summaryCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s := expenseService
-		month := viper.GetInt("month")
 		if month != 0 {
 			summary, err := s.SummaryExpensesByMonth(month)
 			if err != nil {
 				view.DisplayError(err)
 				return
 			}
-			view.DisplaySummary(summary, month)
+			view.DisplaySummary(summary, month, viper.GetString("currency"))
 		} else {
 			summary, err := s.SummaryExpenses()
 			if err != nil {
 				view.DisplayError(err)
 				return
 			}
-			view.DisplaySummary(summary, month)
+			view.DisplaySummary(summary, month, viper.GetString("currency"))
 		}
 	},
 }
@@ -37,5 +36,5 @@ var summaryCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(summaryCmd)
 
-	summaryCmd.Flags().Int("month", 0, "month in number 1-12")
+	summaryCmd.Flags().IntVar(&month, "month", 0, "month in number 1-12")
 }

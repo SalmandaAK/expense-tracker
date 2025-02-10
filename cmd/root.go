@@ -4,7 +4,6 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -47,10 +46,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	viper.SetDefault("currency", "$")
-	viper.BindPFlags(addCmd.Flags())
-	viper.BindPFlags(deleteCmd.Flags())
-	viper.BindPFlags(summaryCmd.Flags())
-	viper.BindPFlags(configureCmd.Flags())
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -73,11 +68,6 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// Config file not found; ignore error if desired
-		} else {
-			// Config file was found but another error was produced
-			panic(fmt.Errorf("fatal error config file: %w", err))
-		}
+		// fmt.Fprintf(os.Stderr, "Reading from config file: %v\n", viper.ConfigFileUsed())
 	}
 }

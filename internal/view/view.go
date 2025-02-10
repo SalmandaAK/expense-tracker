@@ -27,10 +27,10 @@ func DisplayExpenseList(expenses []*domain.Expense, currency string) {
 	tabwriter.Flush()
 }
 
-func DisplaySummary(summary, month int) {
+func DisplaySummary(summary, month int, currency string) {
 	if month == 0 {
-		fmt.Printf("Total expenses: %v\n", summary)
+		fmt.Printf("Total expenses: %v %v\n", currency, summary)
 		return
 	}
-	fmt.Printf("Total expenses for %v: %v\n", time.Month(month).String(), summary)
+	fmt.Printf("Total expenses for %v: %v %v\n", time.Month(month).String(), currency, summary)
 }

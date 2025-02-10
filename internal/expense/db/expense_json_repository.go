@@ -70,9 +70,15 @@ func (r *ExpenseJSONRepository) FindAllExpenses() ([]*domain.Expense, error) {
 	if err != nil {
 		return nil, err
 	}
-	expenses := slices.SortedFunc(maps.Values(r.expenses), func(e1, e2 *domain.Expense) int {
-		return cmp.Compare(e1.Id, e2.Id)
-	})
+	if len(r.expenses) == 0 {
+		return nil, errEmptyExpenseList
+	}
+	var expenses []*domain.Expense
+	if len(r.expenses) > 0 {
+		expenses = slices.SortedFunc(maps.Values(r.expenses), func(e1, e2 *domain.Expense) int {
+			return cmp.Compare(e1.Id, e2.Id)
+		})
+	}
 	return expenses, nil
 }
 
@@ -97,6 +103,9 @@ func (r *ExpenseJSONRepository) FindAllExpensesByMonth(month int) ([]*domain.Exp
 	err := r.loadAllExpenses()
 	if err != nil {
 		return nil, err
+	}
+	if len(r.expenses) == 0 {
+		return nil, errEmptyExpenseList
 	}
 	var expensesByMonth []*domain.Expense
 	iter := maps.Values(r.expenses)

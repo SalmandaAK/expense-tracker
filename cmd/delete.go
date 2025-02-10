@@ -6,7 +6,6 @@ package cmd
 import (
 	"github.com/SalmandaAK/expense-tracker/internal/view"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // deleteCmd represents the delete command
@@ -18,7 +17,7 @@ var deleteCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s := expenseService
-		err := s.DeleteExpense(viper.GetInt("id"))
+		err := s.DeleteExpense(id)
 		if err != nil {
 			view.DisplayError(err)
 			return
@@ -30,6 +29,6 @@ var deleteCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 
-	deleteCmd.Flags().Int("id", 0, "ID number of expense")
+	deleteCmd.Flags().IntVar(&id, "id", 0, "ID number of expense")
 	deleteCmd.MarkFlagRequired("id")
 }
