@@ -83,3 +83,22 @@ func (s *ExpenseService) SummaryExpensesByMonth(month int) (int, error) {
 	}
 	return sum, nil
 }
+
+func (s *ExpenseService) UpdateExpense(id, amount int, description string) error {
+	e, err := s.r.FindExpenseById(domain.ExpenseId(id))
+	if err != nil {
+		return err
+	}
+	if description != "" {
+		e.Description = description
+	}
+	// Expense amount cannot be 0
+	if amount != 0 {
+		e.Amount = amount
+	}
+	err = s.r.UpdateExpense(e)
+	if err != nil {
+		return err
+	}
+	return nil
+}

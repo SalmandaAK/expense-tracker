@@ -119,3 +119,8 @@ func (r *ExpenseJSONRepository) FindAllExpensesByMonth(month int) ([]*domain.Exp
 	}
 	return expensesByMonth, nil
 }
+
+func (r *ExpenseJSONRepository) UpdateExpense(e *domain.Expense) error {
+	r.expenses[e.Id] = e
+	return r.saveAllExpenses()
+}
