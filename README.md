@@ -46,6 +46,9 @@ Go 1.23.0
 # Deleting an expense
 ./expense-tracker delete --id <Expense ID>
 
+# Updating an expense
+./expense-tracker update --id <Expense ID> --description <New Expense Description> --amount <New Expense Amount>
+
 # Set currency
 ./expense-tracker configure --currency <Currency>
 ```
