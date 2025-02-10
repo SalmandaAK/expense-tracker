@@ -1,7 +1,7 @@
 # Expense Tracker
 
 ## About
-An Expense Tracker CLI made using Go for [roadmap.sh backend project](https://roadmap.sh/projects/expense-tracker).
+An Expense Tracker CLI made in Go Languange with Cobra CLI and Viper for [roadmap.sh backend project](https://roadmap.sh/projects/expense-tracker).
 
 ## Pre-requisite
 Go 1.23.0
